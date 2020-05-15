@@ -1,0 +1,3 @@
+<web:getCountryRequest xmlns:web="http://www.yourcompany.com/webservice">
+  <web:name>string</web:name>
+</web:getCountryRequest>

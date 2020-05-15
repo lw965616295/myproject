@@ -1,0 +1,9 @@
+package com.weil.controller;
+dialect  "mvel"
+
+rule "hello"
+    when
+    str: String(str.equals("hello"))
+    then
+       System.out.println("hello world!");
+end

@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8'?><wsdl:definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://service.webservice.weil.com" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns2="http://schemas.xmlsoap.org/soap/http" xmlns:ns1="http://service.webservice.weil.com/" name="WebServiceDemoService" targetNamespace="http://service.webservice.weil.com">
+  <wsdl:import location="http://localhost:8080/webservice/webservice?wsdl=WebServiceDemoService.wsdl" namespace="http://service.webservice.weil.com/">
+    </wsdl:import>
+  <wsdl:binding name="WebServiceDemoServiceSoapBinding" type="ns1:WebServiceDemoService">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="hello">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="hello">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="helloResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="WebServiceDemoService">
+    <wsdl:port binding="tns:WebServiceDemoServiceSoapBinding" name="WebServiceDemoServiceImplPort">
+      <soap:address location="http://localhost:8080/webservice/webservice"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
