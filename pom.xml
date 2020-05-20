@@ -15,6 +15,7 @@
         <module>drools</module>
         <module>springtest</module>
         <module>webservice</module>
+        <module>reflect</module>
     </modules>
     <dependencyManagement>
         <dependencies>

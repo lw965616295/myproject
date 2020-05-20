@@ -3,6 +3,7 @@
  */
 package com.test.controller;
 
+import com.test.entity.Student;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
@@ -26,8 +27,10 @@ public class DemoController {
     }
 
     public static void main(String[] args) {
-        Boolean a = true;
-        System.out.println(a==true);
+//        Boolean a = true;
+//        System.out.println(a==true);
+//        System.out.println(exceptionTest());
+
     }
     @RequestMapping("/demo1")
     public String demo1(Date date){
@@ -39,5 +42,23 @@ public class DemoController {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         dateFormat.setLenient(false);
         binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
+    }
+
+    @RequestMapping("/student")
+    public String getStudent(@RequestBody Student student){
+        System.out.println(student);
+        return student.toString();
+    }
+    public static String exceptionTest(){
+        try{
+            System.out.println("---->11");
+//            int a = 1/0;
+//            return "11";
+        }catch (Exception e){
+            System.out.println("----->22");
+        }finally {
+            System.out.println("---->33");
+        }
+        return "44";
     }
 }
