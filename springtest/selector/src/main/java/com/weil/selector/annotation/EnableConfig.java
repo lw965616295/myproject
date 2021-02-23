@@ -22,4 +22,5 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Import(Config1.class)
 public @interface EnableConfig {
+    String name();
 }

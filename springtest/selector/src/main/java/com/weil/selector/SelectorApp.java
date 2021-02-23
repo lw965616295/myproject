@@ -6,6 +6,7 @@ package com.weil.selector;
 import com.weil.selector.annotation.EnableConfig;
 import com.weil.selector.bean.Monkey;
 import com.weil.selector.config.Config1;
+import com.weil.selector.selector.MySelector;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -22,8 +23,8 @@ import org.springframework.context.annotation.Import;
  **/
 @SpringBootApplication
 @ComponentScan(basePackages = {"com.weil.selector.bean"})
-//@Import(Config1.class)
-@EnableConfig
+@Import(MySelector.class)
+@EnableConfig(name="abc")
 public class SelectorApp {
     @Autowired
     Monkey monkey;
