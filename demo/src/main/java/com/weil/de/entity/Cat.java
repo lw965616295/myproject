@@ -3,6 +3,8 @@ package com.weil.de.entity;
 import lombok.Data;
 import lombok.ToString;
 
+import java.util.List;
+
 /**
  * @ClassName Cat
  * @Author liwei
@@ -15,4 +17,5 @@ import lombok.ToString;
 public class Cat {
     private String name;
     private Integer age;
+    List<String> cc;
 }
