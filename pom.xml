@@ -16,6 +16,7 @@
         <module>springtest</module>
         <module>webservice</module>
         <module>reflect</module>
+        <module>nettyDemo</module>
     </modules>
     <dependencyManagement>
         <dependencies>
