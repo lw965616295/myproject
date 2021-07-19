@@ -5,7 +5,10 @@ import org.junit.Test;
 
 import java.io.*;
 import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
 import java.nio.channels.FileChannel;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 /**
  * @ClassName NioDemo
@@ -107,7 +110,6 @@ public class NioDemo {
             char aChar = byteBuffer.getChar();
             log.debug(String.valueOf(aChar));
         }
-        // 3.get(int i)方法不会让pos指针往下走
     }
     @Test
     public void byteBufferUsage3(){
@@ -189,5 +191,79 @@ public class NioDemo {
         //16:02:07 [DEBUG] [main] c.w.nio.NioDemo - 从标记位置再读一次>>>
         //16:02:07 [DEBUG] [main] c.w.nio.NioDemo - b
         //16:02:07 [DEBUG] [main] c.w.nio.NioDemo - c
+    }
+    /**
+     * byteBuffer和string相互转换
+     */
+    @Test
+    public void byteBuffer_String(){
+        ByteBuffer bb = Charset.defaultCharset().encode("你好");
+        while (bb.hasRemaining()){
+            log.debug("读出：{}",bb.get());
+        }
+
+        bb.flip();
+        CharBuffer charBuffer = Charset.defaultCharset().decode(bb);
+        log.debug("转换：{}", charBuffer.toString());
+        //16:18:56 [DEBUG] [main] c.w.nio.NioDemo - 读出：-28
+        //16:18:56 [DEBUG] [main] c.w.nio.NioDemo - 读出：-67
+        //16:18:56 [DEBUG] [main] c.w.nio.NioDemo - 读出：-96
+        //16:18:56 [DEBUG] [main] c.w.nio.NioDemo - 读出：-27
+        //16:18:56 [DEBUG] [main] c.w.nio.NioDemo - 读出：-91
+        //16:18:56 [DEBUG] [main] c.w.nio.NioDemo - 读出：-67
+        //16:18:56 [DEBUG] [main] c.w.nio.NioDemo - 你好
+    }
+
+    /**
+     * 分散读取
+     */
+    @Test
+    public void readMethod() {
+        RandomAccessFile raf = null;
+        try {
+            String path = NioDemo.class.getClassLoader().getResource("demo.txt").getPath();
+            raf = new RandomAccessFile(path, "rw");
+            FileChannel channel = raf.getChannel();
+            ByteBuffer allocate1 = ByteBuffer.allocate(9);
+            ByteBuffer allocate2 = ByteBuffer.allocate(3);
+            channel.read(new ByteBuffer[]{allocate1, allocate2});
+            allocate1.flip();
+            allocate2.flip();
+            log.debug("allocate1:{}", Charset.defaultCharset().decode(allocate1).toString());
+            log.debug("allocate2:{}", Charset.defaultCharset().decode(allocate2).toString());
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if(raf != null){
+                try {
+                    raf.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        //16:35:24 [DEBUG] [main] c.w.nio.NioDemo - allocate1:123456789
+        //16:35:24 [DEBUG] [main] c.w.nio.NioDemo - allocate2:asd
+    }
+
+    /**
+     * 统一写
+     */
+    @Test
+    public void writeMethod(){
+        String path = NioDemo.class.getClassLoader().getResource("demo.txt").getPath();
+        try (RandomAccessFile rw = new RandomAccessFile(path, "rw")) {
+            FileChannel channel = rw.getChannel();
+            ByteBuffer b1 = ByteBuffer.allocate(4);
+            ByteBuffer b2 = ByteBuffer.allocate(4);
+            b1.put(new byte[]{'a','b','c'});
+            b2.put(new byte[]{'1','2','3'});
+            b1.flip();
+            b2.flip();
+            channel.write(new ByteBuffer[]{b1, b2});
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

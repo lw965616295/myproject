@@ -17,6 +17,7 @@
         <module>webservice</module>
         <module>reflect</module>
         <module>nettyDemo</module>
+        <module>testweb</module>
     </modules>
     <dependencyManagement>
         <dependencies>
