@@ -266,4 +266,37 @@ public class NioDemo {
             e.printStackTrace();
         }
     }
+    @Test
+    public void packetTest(){
+        String str1 = "hello !\nI'm we";
+        String str2 = "il\nwhat's your name?\n";
+        ByteBuffer b1 = ByteBuffer.allocate(32);
+        b1.put(str1.getBytes(StandardCharsets.UTF_8));
+        packetMethod(b1);
+        b1.put(str2.getBytes(StandardCharsets.UTF_8));
+        packetMethod(b1);
+
+    }
+    public void packetMethod(ByteBuffer source){
+        source.flip();
+        // 获取字节数
+        int limit = source.limit();
+        for (int i = 0; i < limit; i++) {
+            // 此方法获取字节不会“删除”源buffer中数据
+            byte b = source.get(i);
+            if (b == '\n') {
+                System.out.println(i);
+                // 创建新buffer暂存，这里减去一个pos是为了要是一个buffer里有两个\n，那么第二要把第一个去掉
+                ByteBuffer newB = ByteBuffer.allocate(i + 1 - source.position());
+                // 设置限制数量，方便后面存入新buffer
+                source.limit(i + 1);
+                newB.put(source);
+                newB.flip();
+                System.out.println(Charset.defaultCharset().decode(newB).toString());
+                // 还原limit,用于压缩
+                source.limit(limit);
+            }
+        }
+        source.compact();
+    }
 }
