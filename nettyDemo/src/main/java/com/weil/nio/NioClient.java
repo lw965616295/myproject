@@ -1,7 +1,8 @@
 package com.weil.nio;
 
-import io.netty.channel.socket.ServerSocketChannel;
-import io.netty.channel.socket.nio.NioServerSocketChannel;
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.nio.channels.SocketChannel;
 
 /**
  * @ClassName NioClient
@@ -12,6 +13,12 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
  **/
 public class NioClient {
     public static void main(String[] args) {
-        ServerSocketChannel ssc = new NioServerSocketChannel();
+        try (SocketChannel sc = SocketChannel.open()) {
+            sc.connect(new InetSocketAddress("127.0.0.1",8081));
+            System.out.println("等待！");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

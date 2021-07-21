@@ -4,7 +4,11 @@ import org.junit.Test;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.channels.FileChannel;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -62,4 +66,24 @@ public class FileOper {
         //用时：58秒
     }
 
+    /**
+     * path 操作
+     */
+    @Test
+    public void pathTest(){
+        Path path = Paths.get("E:\\linux环境\\abc.iso");
+        System.out.println(path);
+        System.out.println(path.isAbsolute());
+        System.out.println(Files.exists(path));
+    }
+    /**
+     * files 操作
+     */
+    @Test
+    public void filesTest() throws IOException {
+        Path source = Paths.get("E:\\linux环境\\CentOS-7-x86_64-DVD-2009.iso");
+        Path dest = Paths.get("E:\\linux环境\\abc.iso");
+        Files.copy(source, dest);
+//        Files.move(source, dest);
+    }
 }
