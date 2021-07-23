@@ -277,7 +277,7 @@ public class NioDemo {
         packetMethod(b1);
 
     }
-    public void packetMethod(ByteBuffer source){
+    public static void packetMethod(ByteBuffer source){
         source.flip();
         // 获取字节数
         int limit = source.limit();
