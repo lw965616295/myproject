@@ -23,6 +23,7 @@ public class BigDecimalTest {
         BigDecimal b = new BigDecimal("2");
         BigDecimal c = new BigDecimal("2");
         BigDecimal divide = a.multiply(b).divide(c,2,BigDecimal.ROUND_HALF_UP);
+        System.out.println(divide);
         //方法一
         BigDecimal bigDecimal = divide.stripTrailingZeros();
         System.out.println(bigDecimal.toPlainString());
@@ -31,6 +32,9 @@ public class BigDecimalTest {
         String format = df.format(divide);
         System.out.println(format);
 
+        //3.10
+        //3.1
+        //3.1
 
         List<String> cc = new ArrayList<>();
         Cat cat = new Cat();

@@ -46,10 +46,12 @@ public class NioServer2 {
                         log.debug("connected...{}", sc);
                         // 绑定读事件
                         sc.configureBlocking(false);
-                        sc.register(selector, SelectionKey.OP_READ);
+                        // 绑定一个bytebuffer
+                        ByteBuffer bb = ByteBuffer.allocate(4);
+                        sc.register(selector, SelectionKey.OP_READ, bb);
                     }else if(selectedKey.isReadable()){
                         SocketChannel channel = (SocketChannel) selectedKey.channel();
-                        ByteBuffer bb = ByteBuffer.allocate(4);
+                        ByteBuffer bb = (ByteBuffer) selectedKey.attachment();
                         int read = 0;
                         try {
                             read = channel.read(bb);
@@ -63,10 +65,18 @@ public class NioServer2 {
                             selectedKey.cancel();
                             channel.close();
                         }else {
-                            bb.flip();
+//                            bb.flip();
 //                            log.debug("读出：{}", Charset.defaultCharset().decode(bb).toString());
                             NioDemo.packetMethod(bb);
-                            bb.clear();
+                            // 判断是否需要拓容
+                            if(bb.position() == bb.limit()){
+                                log.debug("bytebuffer需要拓容：{}",bb.capacity()*2);
+                                ByteBuffer newB = ByteBuffer.allocate(bb.capacity()*2);
+                                bb.flip();
+                                newB.put(bb);
+                                // 替换拓容后的bytebuffer
+                                selectedKey.attach(newB);
+                            }
                         }
                     }
                     // 移除key，防止再次进入

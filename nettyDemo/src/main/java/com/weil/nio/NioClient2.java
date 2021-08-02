@@ -25,8 +25,8 @@ public class NioClient2 {
         try (Socket socket = new Socket("localhost", 8081)) {
             System.out.println(socket);
             OutputStream outputStream = socket.getOutputStream();
-            outputStream.write("hello\\n".getBytes(StandardCharsets.UTF_8));
-            outputStream.write("world\\n".getBytes(StandardCharsets.UTF_8));
+            outputStream.write("hello\n".getBytes(StandardCharsets.UTF_8));
+            outputStream.write("world\n".getBytes(StandardCharsets.UTF_8));
             System.in.read();
         } catch (IOException e) {
             e.printStackTrace();
