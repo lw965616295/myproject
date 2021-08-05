@@ -78,7 +78,9 @@ public class NioServer3 {
         public void run() {
             while (true){
                 try {
+                    log.debug("boss 阻塞前");
                     boss.select();
+                    log.debug("boss 阻塞后");
                     // 遍历事件
                     Set<SelectionKey> sks = boss.selectedKeys();
                     Iterator<SelectionKey> iterator = sks.iterator();
@@ -134,7 +136,9 @@ public class NioServer3 {
         public void run() {
             while (true){
                 try {
+                    log.debug("work 阻塞前");
                     worker.select();
+                    log.debug("work 阻塞后");
                     Set<SelectionKey> sks = worker.selectedKeys();
                     Iterator<SelectionKey> iterator = sks.iterator();
                     while (iterator.hasNext()){
