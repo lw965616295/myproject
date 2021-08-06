@@ -123,14 +123,18 @@ public class NioServer3 {
 
         // 这边接收一个由boss线程传入的SocketChannel
         public void register(SocketChannel sc) throws IOException {
-            // 警告：这块的flag没有生效，每次调用都能进入下面程序
+            // 上面创建了两个work及两个work线程；所以当第三个客户端连上去的时候会再调第一个
             if(!flag){
                 worker = Selector.open();
-                sc.register(worker, SelectionKey.OP_READ, null);
                 // 开启线程执行
                 new Thread(this, "worker-"+index).start();
                 flag = true;
             }
+            log.debug("绑定selector,{},{}",sc,worker);
+            sc.register(worker, SelectionKey.OP_READ, null);
+            // 唤起线程中的worker.select()，让上面的注册生效
+            log.debug("唤醒：{}", worker);
+            worker.wakeup();
         }
 
         @Override

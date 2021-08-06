@@ -1,6 +1,7 @@
 package com.weil.netty.client;
 
-import com.weil.netty.server.KryoDecoder;
+import com.weil.netty.common.KryoEncoder;
+import com.weil.netty.common.KryoDecoder;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -8,6 +9,9 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.handler.codec.string.StringEncoder;
+
+import java.net.InetSocketAddress;
 
 /**
  * @ClassName NettyClient
@@ -17,27 +21,21 @@ import io.netty.channel.socket.nio.NioSocketChannel;
  * @Version 1.0.0
  **/
 public class NettyClient {
-    public static void main(String[] args) {
-        EventLoopGroup eventLoopGroup = new NioEventLoopGroup();
-        Bootstrap bootstrap = new Bootstrap();
-        try {
-            bootstrap.group(eventLoopGroup)
-                    .channel(NioSocketChannel.class)
-                    .handler(new ChannelInitializer<SocketChannel>() {
-                        @Override
-                        protected void initChannel(SocketChannel socketChannel) throws Exception {
-                            socketChannel.pipeline().addLast(new KryoEncoder());
-                            socketChannel.pipeline().addLast(new KryoDecoder());
-                            socketChannel.pipeline().addLast(new ClientHandler());
-                        }
-                    });
-            System.out.println("client start !!!");
-            ChannelFuture future = bootstrap.connect("localhost", 8888);
-            future.channel().closeFuture().sync();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } finally {
-            eventLoopGroup.shutdownGracefully();
-        }
+    public static void main(String[] args) throws InterruptedException {
+        // 模板代码和server端相识
+        new Bootstrap()
+                .group(new NioEventLoopGroup())
+                .channel(NioSocketChannel.class)
+                .handler(new ChannelInitializer<NioSocketChannel>() {
+                    @Override
+                    protected void initChannel(NioSocketChannel ch) throws Exception {
+                        // 编码器
+                        ch.pipeline().addLast(new StringEncoder());
+                    }
+                }).connect(new InetSocketAddress(8081))
+                // connect是异步的，所以需要等待连接好在继续下面操作
+                .sync()
+                .channel()
+                .writeAndFlush("hello world!");
     }
 }

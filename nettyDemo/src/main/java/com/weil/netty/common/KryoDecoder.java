@@ -1,4 +1,4 @@
-package com.weil.netty.server;
+package com.weil.netty.common;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
