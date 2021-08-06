@@ -123,6 +123,7 @@ public class NioServer3 {
 
         // 这边接收一个由boss线程传入的SocketChannel
         public void register(SocketChannel sc) throws IOException {
+            // 警告：这块的flag没有生效，每次调用都能进入下面程序
             if(!flag){
                 worker = Selector.open();
                 sc.register(worker, SelectionKey.OP_READ, null);
@@ -155,6 +156,8 @@ public class NioServer3 {
                                 log.debug("{}发来的信息", sc.getRemoteAddress());
                                 bb.flip();
                                 log.debug(Charset.defaultCharset().decode(bb).toString());
+                                // 回复
+                                sc.write(Charset.defaultCharset().encode("hhhh"));
                             }
                         }
                         iterator.remove();
