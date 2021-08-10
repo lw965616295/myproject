@@ -130,11 +130,12 @@ public class NioServer3 {
                 new Thread(this, "worker-"+index).start();
                 flag = true;
             }
-            log.debug("绑定selector,{},{}",sc,worker);
-            sc.register(worker, SelectionKey.OP_READ, null);
-            // 唤起线程中的worker.select()，让上面的注册生效
+            // 唤起线程中的worker.select()，让下面的注册生效（防止work线程阻塞导致注册失败）
             log.debug("唤醒：{}", worker);
             worker.wakeup();
+            log.debug("绑定selector,{},{}",sc,worker);
+            sc.register(worker, SelectionKey.OP_READ, null);
+
         }
 
         @Override
