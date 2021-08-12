@@ -18,6 +18,7 @@
         <module>reflect</module>
         <module>nettyDemo</module>
         <module>testweb</module>
+        <module>threadtest</module>
     </modules>
     <dependencyManagement>
         <dependencies>
