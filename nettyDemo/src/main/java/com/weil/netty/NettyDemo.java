@@ -1,5 +1,8 @@
 package com.weil.netty;
 
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBufAllocator;
+import io.netty.buffer.ByteBufUtil;
 import io.netty.channel.EventLoop;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.util.concurrent.EventExecutor;
@@ -34,5 +37,17 @@ public class NettyDemo {
         for (EventExecutor eventExecutor : loopGroup) {
             log.debug(eventExecutor.toString());
         }
+    }
+    @Test
+    public void byteBuf(){
+        ByteBuf buffer = ByteBufAllocator.DEFAULT.buffer();
+        System.out.println(buffer);//PooledUnsafeDirectByteBuf(ridx: 0, widx: 0, cap: 256) 默认256字节
+        ByteBuf buffer1 = ByteBufAllocator.DEFAULT.buffer(10);
+        System.out.println(buffer1);//PooledUnsafeDirectByteBuf(ridx: 0, widx: 0, cap: 10)
+        //默认是直接内存，可以手动改成堆内存或者直接内存
+        ByteBuf heapBuf = ByteBufAllocator.DEFAULT.heapBuffer();
+        System.out.println(heapBuf);//PooledUnsafeHeapByteBuf
+        ByteBuf directBuf = ByteBufAllocator.DEFAULT.directBuffer();
+        System.out.println(directBuf);//PooledUnsafeDirectByteBuf
     }
 }
