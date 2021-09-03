@@ -37,6 +37,12 @@ public class NettyServer {
                         // 入站处理，此时处理的是read事件（netty已经做了accept事件）
                         ch.pipeline().addLast(new SimpleChannelInboundHandler<String>() {
                             @Override
+                            public void channelActive(ChannelHandlerContext ctx) throws Exception {
+                                super.channelActive(ctx);
+                                log.debug("连接建立,{}", ctx.channel().remoteAddress());
+                            }
+
+                            @Override
                             protected void channelRead0(ChannelHandlerContext ctx, String s) throws Exception {
                                 log.debug("收到{}发来的信息：{}", ctx.channel().remoteAddress(), s);
                             }
