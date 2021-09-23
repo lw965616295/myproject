@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
 import io.netty.handler.codec.MessageToMessageCodec;
@@ -18,6 +19,7 @@ import java.util.List;
  * @Date 2021/9/14 10:04
  * @Version 1.0.0
  **/
+@ChannelHandler.Sharable
 public class MessageCodec extends MessageToMessageCodec<ByteBuf, Message> {
 
     @Override

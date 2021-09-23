@@ -34,4 +34,16 @@ public class Message {
      * 响应内容
      */
     private String respMsg;
+    /**
+     * 内容
+     */
+    private String content;
+    /**
+     * 到达
+     */
+    private String to;
+    /**
+     * 来源
+     */
+    private String from;
 }

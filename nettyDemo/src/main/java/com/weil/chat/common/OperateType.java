@@ -8,5 +8,5 @@ package com.weil.chat.common;
  * @Version 1.0.0
  **/
 public enum OperateType {
-    LOGIN;
+    LOGIN, SEND;
 }

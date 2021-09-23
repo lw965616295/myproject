@@ -1,17 +1,12 @@
 package com.weil.chat;
 
-import com.weil.chat.common.OperateType;
+import com.weil.chat.handler.ChatHandler;
 import com.weil.chat.protocol.FrameDecoder;
-import com.weil.chat.protocol.Message;
 import com.weil.chat.protocol.MessageCodec;
 import com.weil.chat.service.UserLogin;
 import com.weil.chat.service.UserLoginImp;
-import com.weil.chat.session.ChatSessionFactory;
 import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelInitializer;
-import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
@@ -33,9 +28,8 @@ public class ChatServer {
         NioEventLoopGroup boss = new NioEventLoopGroup();
         NioEventLoopGroup worker = new NioEventLoopGroup();
         LoggingHandler loggingHandler = new LoggingHandler(LogLevel.DEBUG);
-        FrameDecoder frameDecoder = new FrameDecoder();
         MessageCodec messageCodec = new MessageCodec();
-        UserLogin userLogin = new UserLoginImp();
+        ChatHandler chatHandler = new ChatHandler();
         try {
             ChannelFuture future = new ServerBootstrap()
                     .group(boss, worker)
@@ -44,46 +38,20 @@ public class ChatServer {
                         @Override
                         protected void initChannel(SocketChannel ch) throws Exception {
                             // 编解码器
-                            ch.pipeline().addLast(frameDecoder);
+                            ch.pipeline().addLast(new FrameDecoder());
                             ch.pipeline().addLast(loggingHandler);
                             ch.pipeline().addLast(messageCodec);
-                            ch.pipeline().addLast(new SimpleChannelInboundHandler<Message>(){
-                                @Override
-                                public void channelActive(ChannelHandlerContext ctx) throws Exception {
-                                    log.debug("有客户端连接,{}", ctx.channel().remoteAddress());
-                                }
-
-                                @Override
-                                protected void channelRead0(ChannelHandlerContext ctx, Message message) throws Exception {
-                                    OperateType operateType = message.getOperateType();
-                                    switch (operateType){
-                                        case LOGIN :
-                                            //登录
-                                            boolean flag = userLogin.login(message.getName(), message.getPwd());
-                                            if(flag){
-                                                ChatSessionFactory.getSession().bind(message.getName(), ctx.channel());
-                                                Message reMsg = new Message();
-                                                reMsg.setSuccess(true);
-                                                reMsg.setRespMsg("登录成功！");
-                                                ctx.writeAndFlush(reMsg);
-                                            }else {
-                                                Message reMsg = new Message();
-                                                reMsg.setSuccess(false);
-                                                reMsg.setRespMsg("登录失败！");
-                                                ctx.writeAndFlush(reMsg);
-                                            }
-
-                                            break;
-                                    }
-                                }
-                            });
+                            ch.pipeline().addLast(chatHandler);
                         }
                     }).bind(8080).sync();
+            future.channel().closeFuture().sync();
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            log.error("server error", e);
+        } finally {
             boss.shutdownGracefully();
             worker.shutdownGracefully();
         }
 
     }
+
 }

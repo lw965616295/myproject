@@ -1,5 +1,6 @@
 package com.weil.chat.protocol;
 
+import io.netty.channel.ChannelHandler;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 
 /**
