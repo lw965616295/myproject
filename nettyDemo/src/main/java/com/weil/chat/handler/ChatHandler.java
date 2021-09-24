@@ -5,11 +5,16 @@ import com.weil.chat.protocol.Message;
 import com.weil.chat.service.UserLogin;
 import com.weil.chat.service.UserLoginImp;
 import com.weil.chat.session.ChatSessionFactory;
+import com.weil.chat.session.Group;
+import com.weil.chat.session.GroupSessionFactory;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.List;
+import java.util.Set;
 
 /**
  * @ClassName ChatHandler
@@ -65,6 +70,28 @@ public class ChatHandler extends SimpleChannelInboundHandler<Message> {
                 }else {
                     // 在线
                     c1.writeAndFlush(message);
+                }
+                break;
+            case GCREATE:
+                String gName = message.getGName();
+                Set<String> members = message.getMembers();
+                Group group = GroupSessionFactory.getGroupSession().createGroup(gName, members);
+                if(group == null){
+                    // 创建新聊天室成功
+                    List<Channel> channels = GroupSessionFactory.getGroupSession().getChannels(gName);
+                    channels.forEach(channel -> {
+                        // 分别发送提示
+                        Message m1 = new Message();
+                        m1.setSuccess(true);
+                        m1.setContent("您已被拉入"+gName+"聊天室！");
+                        channel.writeAndFlush(m1);
+                    });
+                }else {
+                    // 聊天室已存在
+                    Message m1 = new Message();
+                    m1.setSuccess(false);
+                    m1.setContent(gName+"聊天室已经存在");
+                    ctx.writeAndFlush(m1);
                 }
                 break;
         }

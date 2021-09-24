@@ -17,14 +17,14 @@ import io.netty.handler.logging.LoggingHandler;
 import lombok.extern.slf4j.Slf4j;
 
 import java.nio.charset.StandardCharsets;
-import java.util.Optional;
-import java.util.Scanner;
+import java.util.*;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.LockSupport;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.stream.Collectors;
 
 /**
  * @ClassName ChatClient
@@ -110,6 +110,18 @@ public class ChatClient {
                                                     m1.setTo(s[1]);
                                                     m1.setContent(s[2]);
                                                     ctx.writeAndFlush(m1);
+                                                    break;
+                                                case "gcreate":
+                                                    Message m2 = new Message();
+                                                    m2.setOperateType(OperateType.GCREATE);
+                                                    m2.setGName(s[1]);
+                                                    String[] split = s[2].split(",");
+                                                    Set<String> members = Arrays.stream(split).collect(Collectors.toSet());
+                                                    // 自己也加入
+                                                    members.add(name);
+                                                    m2.setMembers(members);
+                                                    ctx.writeAndFlush(m2);
+                                                    break;
                                             }
 
                                         }

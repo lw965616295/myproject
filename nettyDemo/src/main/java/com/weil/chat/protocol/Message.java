@@ -4,6 +4,8 @@ import com.weil.chat.common.OperateType;
 import lombok.Data;
 import lombok.ToString;
 
+import java.util.Set;
+
 /**
  * @ClassName Message
  * @Author weil
@@ -46,4 +48,12 @@ public class Message {
      * 来源
      */
     private String from;
+    /**
+     * 聊天室名
+     */
+    private String gName;
+    /**
+     * 成员名
+     */
+    private Set<String> members;
 }
