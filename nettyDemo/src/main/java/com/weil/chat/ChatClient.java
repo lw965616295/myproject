@@ -14,6 +14,9 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import io.netty.handler.codec.string.StringEncoder;
 import io.netty.handler.logging.LoggingHandler;
+import io.netty.handler.timeout.IdleState;
+import io.netty.handler.timeout.IdleStateEvent;
+import io.netty.handler.timeout.IdleStateHandler;
 import lombok.extern.slf4j.Slf4j;
 
 import java.nio.charset.StandardCharsets;
@@ -52,6 +55,18 @@ public class ChatClient {
 //                            ch.pipeline().addLast(new LoggingHandler());
                             ch.pipeline().addLast(frameDecoder);
                             ch.pipeline().addLast(messageCodec);
+                            // 心跳，4秒没有写消息，则触发写事件
+                            ch.pipeline().addLast(new IdleStateHandler(0, 4, 0));
+                            ch.pipeline().addLast(new ChannelDuplexHandler(){
+                                @Override
+                                public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
+                                    IdleStateEvent idleStateEvent = (IdleStateEvent) evt;
+                                    if (idleStateEvent.state().equals(IdleState.WRITER_IDLE)) {
+                                        // 发送心跳
+                                        ctx.writeAndFlush(new Message());
+                                    }
+                                }
+                            });
                             ch.pipeline().addLast(new SimpleChannelInboundHandler<Message>() {
                                 @Override
                                 protected void channelRead0(ChannelHandlerContext channelHandlerContext, Message message) throws Exception {
@@ -70,27 +85,28 @@ public class ChatClient {
                                     // 开启线程，处理各种聊天操作
                                     new Thread(()->{
                                         String name = null;
-                                            System.out.println("请输入用户名：");
-                                            name = scanner.nextLine();
-                                            System.out.println("请输入密码：");
-                                            String pwd = scanner.nextLine();
-                                            Message message = new Message();
-                                            message.setOperateType(OperateType.LOGIN);
-                                            message.setName(name);
-                                            message.setPwd(pwd);
-                                            ctx.writeAndFlush(message);
-                                            System.out.println("等待后续操作...");
-                                            try {
-                                                wait.await();
-                                            } catch (InterruptedException e) {
-                                                e.printStackTrace();
-                                            }
-                                            if(!LOGIN.get()){
-                                                // 登录不成功，结束
-                                                ctx.channel().close();
-                                                return;
-                                            }
-                                        while (true){
+                                        System.out.println("请输入用户名：");
+                                        name = scanner.nextLine();
+                                        System.out.println("请输入密码：");
+                                        String pwd = scanner.nextLine();
+                                        Message message = new Message();
+                                        message.setOperateType(OperateType.LOGIN);
+                                        message.setName(name);
+                                        message.setPwd(pwd);
+                                        ctx.writeAndFlush(message);
+                                        System.out.println("等待后续操作...");
+                                        try {
+                                            wait.await();
+                                        } catch (InterruptedException e) {
+                                            e.printStackTrace();
+                                        }
+                                        if(!LOGIN.get()){
+                                            // 登录不成功，结束
+                                            ctx.channel().close();
+                                            return;
+                                        }
+                                        boolean flag = true;
+                                        while (flag){
                                             System.out.println("==================================");
                                             System.out.println("send [username] [content]");
                                             System.out.println("gsend [group name] [content]");
@@ -130,6 +146,10 @@ public class ChatClient {
                                                     m3.setFrom(name);
                                                     ctx.writeAndFlush(m3);
                                                     break;
+                                                case "quit":
+                                                    flag = false;
+                                                    ctx.channel().close();
+                                                    break;
                                             }
 
                                         }
@@ -140,12 +160,14 @@ public class ChatClient {
                                 @Override
                                 public void channelInactive(ChannelHandlerContext ctx) throws Exception {
                                     log.debug("连接已经断开，按任意键退出..");
+                                    ctx.channel().close();
                                 }
 
                                 // 在出现异常时触发
                                 @Override
                                 public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
                                     log.debug("连接已经断开，按任意键退出..{}", cause.getMessage());
+                                    ctx.channel().close();
                                 }
                             });
 
@@ -157,6 +179,7 @@ public class ChatClient {
         } catch (InterruptedException e) {
             log.error("client error", e);
         }finally {
+            log.debug("client close");
             loopGroup.shutdownGracefully();
         }
     }

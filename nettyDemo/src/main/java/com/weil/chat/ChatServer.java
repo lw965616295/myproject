@@ -12,6 +12,9 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
+import io.netty.handler.timeout.IdleState;
+import io.netty.handler.timeout.IdleStateEvent;
+import io.netty.handler.timeout.IdleStateHandler;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -41,6 +44,20 @@ public class ChatServer {
                             ch.pipeline().addLast(new FrameDecoder());
                             ch.pipeline().addLast(loggingHandler);
                             ch.pipeline().addLast(messageCodec);
+                            // 5秒没有收到信息，触发读空闲事件
+                            ch.pipeline().addLast(new IdleStateHandler(5, 0, 0));
+                            // 处理空闲事件
+                            ch.pipeline().addLast(new ChannelDuplexHandler(){
+                                @Override
+                                public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
+                                    IdleStateEvent idleStateEvent = (IdleStateEvent) evt;
+                                    if(idleStateEvent.state().equals(IdleState.READER_IDLE)){
+                                        log.debug("5秒没读到数据，关闭连接");
+                                        // 关闭连接
+                                        ctx.channel().close();
+                                    }
+                                }
+                            });
                             ch.pipeline().addLast(chatHandler);
                         }
                     }).bind(8080).sync();
