@@ -122,6 +122,14 @@ public class ChatClient {
                                                     m2.setMembers(members);
                                                     ctx.writeAndFlush(m2);
                                                     break;
+                                                case "gsend":
+                                                    Message m3 = new Message();
+                                                    m3.setOperateType(OperateType.GSEND);
+                                                    m3.setGName(s[1]);
+                                                    m3.setContent(s[2]);
+                                                    m3.setFrom(name);
+                                                    ctx.writeAndFlush(m3);
+                                                    break;
                                             }
 
                                         }

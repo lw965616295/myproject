@@ -94,6 +94,14 @@ public class ChatHandler extends SimpleChannelInboundHandler<Message> {
                     ctx.writeAndFlush(m1);
                 }
                 break;
+            case GSEND:
+                String gName1 = message.getGName();
+                List<Channel> channels = GroupSessionFactory.getGroupSession().getChannels(gName1);
+                channels.forEach(channel -> {
+                    // 分别发送提示
+                    channel.writeAndFlush(message);
+                });
+                break;
         }
     }
 }
