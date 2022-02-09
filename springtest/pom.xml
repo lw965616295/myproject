@@ -16,7 +16,7 @@
         <module>test2</module>
         <module>selector</module>
         <module>beantest</module>
-        <module>test_redis</module>
+        <module>redistest</module>
     </modules>
     <dependencies>
         <dependency>
