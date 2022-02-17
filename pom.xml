@@ -19,7 +19,7 @@
         <module>nettyDemo</module>
         <module>testweb</module>
         <module>threadtest</module>
-        <module>design_pattern</module>
+        <module>design-pattern</module>
     </modules>
     <dependencyManagement>
         <dependencies>

@@ -2,6 +2,9 @@ package com.weil.controller;
 
 import com.weil.service.RedisLock;
 import lombok.extern.slf4j.Slf4j;
+import org.redisson.Redisson;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -63,6 +66,30 @@ public class IndexController {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        // 持续时间
+        long during = System.currentTimeMillis() - start;
+        log.info("执行时间：{}ms，计数count:{}", during, count);
+        return "hello";
+    }
+    /**
+     * 测试redisson分布式锁
+     */
+    @GetMapping("/test2")
+    public String test2() throws InterruptedException {
+        RedissonClient redissonClient = Redisson.create();
+        RLock rlock = redissonClient.getLock("redisson");
+        CountDownLatch latch = new CountDownLatch(1000);
+        long start = System.currentTimeMillis();
+        ThreadPoolExecutor executor = new ThreadPoolExecutor(5, 50, 1, TimeUnit.SECONDS, new ArrayBlockingQueue<>(10000), new ThreadPoolExecutor.CallerRunsPolicy());
+        for (int i = 0; i < 1000; i++) {
+            executor.execute(()->{
+                rlock.lock();
+                count++;
+                rlock.unlock();
+                latch.countDown();
+            });
+        }
+        latch.await();
         // 持续时间
         long during = System.currentTimeMillis() - start;
         log.info("执行时间：{}ms，计数count:{}", during, count);
