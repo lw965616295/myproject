@@ -24,4 +24,8 @@ public class ExecutorService {
         }
         log.info("test asyncExecutor end!");
     }
+    //2022-02-18 16:15:13.818  INFO 12920 --- [weil-executor-1] com.weil.bean.service.ExecutorService    : test asyncExecutor start!
+    //2022-02-18 16:15:14.821  INFO 12920 --- [weil-executor-1] com.weil.bean.service.ExecutorService    : test asyncExecutor end!
+    //2022-02-18 16:15:21.360  INFO 12920 --- [weil-executor-2] com.weil.bean.service.ExecutorService    : test asyncExecutor start!
+    //2022-02-18 16:15:22.370  INFO 12920 --- [weil-executor-2] com.weil.bean.service.ExecutorService    : test asyncExecutor end!
 }

@@ -3,6 +3,7 @@ package com.weil.bean.config;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Component;
@@ -17,10 +18,9 @@ import java.util.concurrent.ThreadPoolExecutor;
  * @Date 2021/12/23 13:54
  * @Version 1.0.0
  **/
-@Configurable
 @EnableAsync
 @Slf4j
-@Component
+@Configuration
 public class ExecutorConfig {
     @Bean
     public Executor asyncExecutor(){
