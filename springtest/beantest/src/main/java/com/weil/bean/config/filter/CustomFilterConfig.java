@@ -1,11 +1,10 @@
-package com.weil.bean.config;
+package com.weil.bean.config.filter;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import javax.servlet.annotation.WebFilter;
 import java.util.ArrayList;
 import java.util.Arrays;
 
