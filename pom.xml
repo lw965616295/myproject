@@ -20,6 +20,7 @@
         <module>testweb</module>
         <module>threadtest</module>
         <module>design-pattern</module>
+        <module>bean-convert</module>
     </modules>
     <dependencyManagement>
         <dependencies>
