@@ -3,6 +3,7 @@ package com.weil.bean;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.ServletComponentScan;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
  * @ClassName BeanApp
@@ -12,6 +13,7 @@ import org.springframework.boot.web.servlet.ServletComponentScan;
  * @Version 1.0.0
  **/
 @SpringBootApplication
+@EnableScheduling
 public class BeanApp {
     public static void main(String[] args) {
         SpringApplication.run(BeanApp.class, args);
