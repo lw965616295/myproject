@@ -34,7 +34,7 @@ public class ExecutorConfig {
         executor.setMaxPoolSize(maxNum);
         executor.setQueueCapacity(queueNum);
         executor.setThreadNamePrefix("weil-executor-");
-        // 线程达到最大，策略
+        // 线程达到最大，策略，保证不丢失任务请求，让调用执行自己的线程来执行，但可能影响整体性能（阻塞该线程）
         executor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
         // 初始化
         executor.initialize();
