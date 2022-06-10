@@ -20,6 +20,7 @@
         <module>retrofit-test</module>
         <module>exception-test</module>
         <module>multi-datasource</module>
+        <module>poi-demo</module>
     </modules>
     <dependencies>
         <dependency>
