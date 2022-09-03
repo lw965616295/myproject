@@ -1,0 +1,44 @@
+server:
+  port: 8081
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/test?serverTimezone=GMT%2B8
+    username: root
+    password: root
+    hikari:
+      minimum-idle: 5
+      maximum-pool-size: 15
+      auto-commit: true
+      idle-timeout: 30000
+      pool-name: hikari_pool
+      max-lifetime: 30000
+      connection-timeout: 30000
+      connection-test-query: SELECT 1
+  redis:
+    host: localhost
+    password:
+    timeout: 10000
+    database: 0
+    lettuce:
+      pool:
+        max-active: 8
+        max-wait: -1
+        max-idle: 8
+        min-idle: 0
+mybatis:
+  type-aliases-package: com.weil.mini.model
+  mapper-locations: classpath:mapper/*Mapper.xml
+  configuration:
+    map-underscore-to-camel-case: true
+jwt:
+  secret: VGiXGUJDQl0OjjKmvTH3ycbkyVSg5Sb3RyPy40DpN98aDGX3
+mini:
+  wechat:
+    appid: wx3db8c24c46c4b7e0
+    secret: 274b8104ffda919bd534e5ad70bfe13c
+  alipay:
+    appid: 2021003145674088
+    public_key: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEArY4An5VNgNw4hz9w1Y+DSR6YLSoqu0HcidNGQEpW/bh2SGTus0cwtxBOedH/FaOurOrWUSuYKLqVJ87lw9W7JQxlpXhAwkPsT4miRrQLgFcvtB5mMso2+QqeFqBEATvmGE3GYc04MdUX47yn3NcPcqJCNm8JaLKtwIL++n5EkEqR04PRZl9A9jHQ/iFze73+U9tXnBC2rtY3GbWLCIIBnbly3D1yMVQeHWDOr9MQdYaX0IwQPV/FZ28xv7BE9v3qDavrsdnQwVFYbhK/Sn2Q2TjTo5N4ik+IhXvQpQnHlD1fRnsghnPc/VLXg+McYjWyBfzTNgVUBUp0SzWoeNOirQIDAQAB
+    private_key: MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDSeNbiz1ZlEzFpzk1THlZ+An0Xkr/O5lgAf6agzqbtKNyZCw7fGRhaZrhLiefFNYrGajyEVtIWLuVUzpcfre3F9A9kuGYwyMA59Qcp5Lp/GfJDvn7PnYpksAwKmRvsD7ujV2wO4H8bgR8Xtckhqny4xQyneVRqJcGWxplXzOdf2qv2kvlOvFSoFX4WLYJ/gYWzIMyY2Ff5DaADbdA3YjzMbpfRK93dYZPkhEBxP2xj68coIXYfqnF/36aeMHOyLWgdlMpaq15Iz16WRhDEoilHEna8Y+G7yz4q+mrXKMPWWWAIQcSdUS75FXLSKdTrgAueW58lzogRbdB35z7Y4yu9AgMBAAECggEAWQDkzjEjtcZyBO5K4LVZmhvvTkKufg4GdN+GVUZObMf00XtNpKZ2F/SMRtVgf5Luxo0yXjxgxyS5si1S1wC0JhvZTpx0Cnk6YMfvaZXiD9GnE2LBOYbDeWTBEtJAbokQrjhP59KjrbvirCIhle0EpRYfDctPGTwyK1J8khaCWZPYwuMrhatGFNZCjZ6XiqzAbU6Nxa/XFYj4TstTgblz9R6XNLJAl156WoLt7cArtIni8aK+zYqPnlX1Gr6mHzh3Bl4/zgjJhM15irKchg37opfh+bhmfrc3Bx1oeLVY8dAgvIRyGLDZZ+ZSG2EzuHcghV2Lp97mqSw4geiRR411eQKBgQD0d5FV2SbeUDpkL7V4/e4m946aKmZROfQCXEbbF86ZPuBW/7K/vJf+7OFq4lK6QOncM9jmIWE4ooXphrGdWCP7z0592WQCL1VIpFRv5wSCeJJFwe5YRVchkiDsxotbe7W1p8U+oX8BAo3Q0P6l/UoClxmJKQ6Be805ostHURIBMwKBgQDcZraSu3Jc+g7fQ3odMCy3TGuAaONg1WE0pYLm42pHEJI44X7VNopYto6sr8VsnGgaxTti249b2M9L6TglbGUb/WHAD1K1CgXqWAg2GItm18eECwI8c3agaLODSsYlnR5sR0bB1I3cOasaiNBx/ud0V3k0QPiSLS7rRx+YbFH/TwKBgQCOZqOq7R39+5+3wi6kNs4ltqhDVxVYlTh0s4m2j6yRiZWmN7XIiDPFk/hOiV0FD1DqKu1aR/FYyxrUB9ioPbJgOMaQ+jOOLkIwWUCyGlB/K3qQ1cFfe6ygan1xTsnYVTxofzyfGfVgAjvXehYLXHpi/d8rDVZcyF+oBhMBDNE/DwKBgQCQLAhF16QpudE8rrEUosy9Ypn3t6T1VN9vRs1oJ17/+ZEM8ES9SB4bhd+yipBESdO3n0kHk8QlOp/vcjGuGUfSlV75+YwKrPHNp6RHbqrRrVjvwRvHW2g/6f1zZthTBoI+Jinc5SOe6YJJqzFfQHU7H3VDfzSauj+03COI22KP9QKBgF9FpmDSheCtxHJhIsTt7aGvSOMNJDrlxNbxXhddq6rImJM3nxWVATZ8++QzVl848//KqiZlRz9wgEvUMCTPvQe+d4J2qPKXorajonltLd8uzFkHrlh5/AYHw5oLhV4jsTktQYIxQxBkuvwQZGAcEGIhrnh4QcRyTmU4R6qmsiw2
+

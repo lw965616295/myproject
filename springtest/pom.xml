@@ -21,6 +21,7 @@
         <module>exception-test</module>
         <module>multi-datasource</module>
         <module>poi-demo</module>
+        <module>miniprogram-login</module>
     </modules>
     <dependencies>
         <dependency>
@@ -32,6 +33,7 @@
             <artifactId>lombok</artifactId>
             <version>1.16.22</version>
         </dependency>
+
     </dependencies>
 
 </project>
