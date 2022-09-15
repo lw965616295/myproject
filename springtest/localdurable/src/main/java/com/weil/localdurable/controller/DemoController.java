@@ -24,7 +24,7 @@ import java.util.List;
 @RestController
 public class DemoController {
     @PostMapping("pros")
-    public ProInfo saveData(@RequestBody List<ProInfo> proInfos) throws Exception{
+    public List<ProInfo> saveData(@RequestBody List<ProInfo> proInfos) throws Exception{
         // 保存到classpath: 下面，及打包后的“项目\BOOT-INF\classes”目录下
 //        String path = ResourceUtils.getURL(ResourceUtils.CLASSPATH_URL_PREFIX).getPath() + "/de.txt";
         // 上面的这些对于jar包形式，不能进行读取和保存操作，不过可以使用Thread.currentThread().getContextClassLoader()
@@ -32,24 +32,24 @@ public class DemoController {
         // 判断系统类型，指定不同保存路径
         String path = "";
         if(isWindow()){
-            path = "c:/de.txt";
+            path = "d:/de.txt";
         }else {
             path = "/opt/de.txt";
         }
         System.out.println(path);
         FileOutputStream fos = new FileOutputStream(path);
         ObjectOutputStream oos = new ObjectOutputStream(fos);
-        ProInfo proInfo = new ProInfo();
-        proInfo.setProName("开始阶段");
-        proInfo.setStartDate(new Date());
-        proInfo.setEndDate(new Date());
-        proInfo.setRate(17);
-        oos.writeObject(proInfo);
-
+//        ProInfo proInfo = new ProInfo();
+//        proInfo.setProName("开始阶段");
+//        proInfo.setStartDate(new Date());
+//        proInfo.setEndDate(new Date());
+//        proInfo.setRate(17);
+//        oos.writeObject(proInfo);
+            oos.writeObject(proInfos);
 
         FileInputStream fis = new FileInputStream(path);
         ObjectInputStream ois = new ObjectInputStream(fis);
-        ProInfo u = (ProInfo) ois.readObject();
+        List<ProInfo> u = (List<ProInfo>) ois.readObject();
         return u;
     }
     @GetMapping("pros")
