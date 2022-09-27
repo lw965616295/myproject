@@ -21,6 +21,7 @@
         <module>threadtest</module>
         <module>design-pattern</module>
         <module>bean-convert</module>
+        <module>springioc</module>
     </modules>
     <dependencyManagement>
         <dependencies>
