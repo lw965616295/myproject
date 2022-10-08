@@ -22,6 +22,7 @@
         <module>design-pattern</module>
         <module>bean-convert</module>
         <module>springioc</module>
+        <module>mqtt-demo</module>
     </modules>
     <dependencyManagement>
         <dependencies>
