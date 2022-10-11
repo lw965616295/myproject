@@ -22,20 +22,17 @@ import java.util.Objects;
 @Aspect
 @Component
 public class DynamicAop {
-    /**
-     * 切点
-     */
-    @Pointcut("@annotation(com.weil.annotation.DS)")
-    public void dsPointCut(){}
 
     /**
      * 切面
+     * @within(inner) 注解在类上
+     * @annotation(inner) 注解在方法上
      */
-    @Around("dsPointCut()")
-    public Object around(ProceedingJoinPoint joinPoint) throws Throwable{
-        String ds = getDs(joinPoint).value();
+    @Around("@within(ds) || @annotation(ds)")
+    public Object around(ProceedingJoinPoint joinPoint, DS ds) throws Throwable{
+        ds = getDs(joinPoint);
         // 先设置数据源
-        DynamicDataSourceContextHolder.setContext(ds);
+        DynamicDataSourceContextHolder.setContext(ds.value());
         // 方法放行
         Object proceed = joinPoint.proceed();
         // 清除数据源
@@ -45,17 +42,18 @@ public class DynamicAop {
     }
 
     /**
-     * 获取注解的值
+     * 获取注解
+     * 如果类上和方法上都有注解，则已方法上的为准
      */
     private DS getDs(ProceedingJoinPoint joinPoint) {
-        // 先判断类的注解，再判断方法的注解
-        Class<?> targetClass = joinPoint.getTarget().getClass();
-        DS ds = targetClass.getAnnotation(DS.class);
-        if(Objects.nonNull(ds)){
-            return ds;
-        }else {
-            MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
-            return methodSignature.getMethod().getAnnotation(DS.class);
+        // 先判断方法的注解
+        MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
+        DS ds = methodSignature.getMethod().getAnnotation(DS.class);
+        if(ds == null){
+            // 方法上没有注解，则使用类上的
+            Class<?> targetClass = joinPoint.getTarget().getClass();
+            ds = targetClass.getAnnotation(DS.class);
         }
+        return ds;
     }
 }

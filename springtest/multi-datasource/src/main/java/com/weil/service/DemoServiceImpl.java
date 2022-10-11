@@ -16,13 +16,14 @@ import java.util.Map;
  * @Version: 1.0
  */
 @Service
+@DS
 public class DemoServiceImpl implements DemoService {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
     @Override
-    @DS
+//    @DS
     public Map<String, Object> getUser() {
         String sql1 = "select * from user where id=?";
         return jdbcTemplate.queryForMap(sql1, "2");
