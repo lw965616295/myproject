@@ -23,6 +23,7 @@
         <module>poi-demo</module>
         <module>miniprogram-login</module>
         <module>localdurable</module>
+        <module>limit-demo</module>
     </modules>
     <dependencies>
         <dependency>
