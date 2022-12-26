@@ -4,3 +4,4 @@
 ## 2.优化方式1
 >程序每次执行每次都需要通过buildLuaScript()方法构建lua执行脚本，
 >效率低，我们可以生成一个lua文件放在resources目录下，利用@PostConstruct注解提前加载。
+## 3.基于guava方式实现
