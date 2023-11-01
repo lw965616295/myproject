@@ -23,6 +23,7 @@
         <module>bean-convert</module>
         <module>springioc</module>
         <module>mqtt-demo</module>
+        <module>algorithm</module>
     </modules>
     <dependencyManagement>
         <dependencies>
