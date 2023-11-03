@@ -24,6 +24,9 @@ public class Demo {
         System.out.println(s);
     }
 
+    /**
+     * 逆地址解析
+     */
     public static void getReverseAddress(){
         ReverseAddressReq req = new ReverseAddressReq();
         req.setKey(TenxunMapConstants.KEY)

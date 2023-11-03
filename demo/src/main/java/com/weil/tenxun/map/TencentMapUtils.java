@@ -38,7 +38,7 @@ public class TencentMapUtils {
                 sb.append(str);
             }
         } catch (Exception ex) {
-            System.out.println("读取出现异常...");
+            throw new RuntimeException("读取出现异常...");
         } finally {
             try {
                 if (in != null) {
@@ -46,10 +46,9 @@ public class TencentMapUtils {
                 }
             } catch (IOException ex) {
                 System.out.println("关闭资源出现异常");
-            }finally {
-                return sb.toString();
             }
         }
+        return sb.toString();
     }
 
     /**
