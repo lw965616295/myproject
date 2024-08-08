@@ -24,6 +24,9 @@
         <module>miniprogram-login</module>
         <module>localdurable</module>
         <module>limit-demo</module>
+        <module>doc-tool</module>
+        <module>poi2-demo</module>
+        <module>libreoffice-demo</module>
     </modules>
     <dependencies>
         <dependency>

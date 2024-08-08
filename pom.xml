@@ -24,6 +24,7 @@
         <module>springioc</module>
         <module>mqtt-demo</module>
         <module>algorithm</module>
+        <module>document-resolver</module>
     </modules>
     <dependencyManagement>
         <dependencies>

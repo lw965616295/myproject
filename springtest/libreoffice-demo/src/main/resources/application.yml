@@ -1,0 +1,19 @@
+jodconverter:
+  remote:
+    enabled: true
+    url: http://192.168.6.131:9980
+    ssl:
+      enabled: false
+    connect-timeout: 5000  # 提高连接超时时间到5000毫秒（5秒）
+    socket-timeout: 150000  # 提高套接字超时时间到15000毫秒（15秒）
+    pool-size: 10
+    task-execution-timeout: 120000 #设置单个任务的最大执行时间
+
+#jodconverter:
+#  local:
+#    enabled: true
+#    officeHome: d:\LibreOffice
+#    taskExecutionTimeout: 86400000
+#    taskQueueTimeout: 86400000
+#    portNumbers: 8100
+#    processTimeout: 86400000
